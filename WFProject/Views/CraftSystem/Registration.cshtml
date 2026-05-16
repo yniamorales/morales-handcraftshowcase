@@ -1,0 +1,142 @@
+﻿@{
+    Layout = "~/Views/Shared/_CraftsSystemLayout.cshtml";
+}
+
+<div class="container" style="margin-top: 3vh; margin-bottom: 3vh;">
+    <div class="row">
+        <div class="col s12 m12 l10 offset-l1">
+
+            <h2 style="font-family: 'Zacbel X', sans-serif; font-size: 50px; color: #f50057; margin-bottom: 2rem; text-align: center; letter-spacing: 2px;">
+                REGISTRATION
+            </h2>
+
+            <div class="row z-depth-2 regis-card"
+                 style="background-color:#FFF0F5; border-radius:30px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.15); display: flex; flex-wrap: wrap; min-height: 550px;">
+
+
+                <div class="col s12 m5 pink lighten-5"
+                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 3rem 2rem; border-right: 1px solid rgba(245, 0, 87, 0.05);">
+
+                    <img src="@Url.Content("~/Content/images/logo1.png")" alt="Logo"
+                         style="width: 100%; max-width: 320px; margin-bottom: 25px; transition: transform 0.3s ease;">
+
+                    <p style="font-size: 1.1rem; color: #666; line-height: 1.8; font-weight: 300; padding: 0 10px;">
+                        Join the creative community where artisans and craft lovers connect.
+                        Support local artists in the Philippines and showcase your own crafts.
+                    </p>
+                </div>
+
+                <div class="col s12 m7" style="padding: 3rem; background-color: #ffffff;">
+                    <form name="registerForm" novalidate>
+
+                        <div class="row" style="margin-bottom: 15px;">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix" style="color:#FF69B4;">account_circle</i>
+                                <input id="username" name="username" type="text" maxlength="15"
+                                       ng-model="UserName" ng-change="checkAdmin()"
+                                       ng-pattern="/^[a-zA-Z0-9]{6,15}$/" required
+                                       style="border-bottom: 1px solid #FFC1E3;">
+                                <label for="username">Username</label>
+
+                                <div ng-show="UserName && registerForm.username.$invalid" style="margin-left: 3rem;">
+                                    <span class="red-text" style="font-size: 11px; font-weight: 500;">6-15 letters or numbers required</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-bottom: 15px;">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix" style="color:#FF69B4;">lock</i>
+                                <input id="password" name="password" type="password"
+                                       ng-model="Password" ng-minlength="6" required
+                                       style="border-bottom: 1px solid #FFC1E3;">
+                                <label for="password">Password</label>
+
+                                <div ng-show="Password && registerForm.password.$invalid" style="margin-left: 3rem;">
+                                    <span class="red-text" style="font-size: 11px; font-weight: 500;">Minimum 6 characters required</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-bottom: 20px;">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix" style="color:#FF69B4;">person</i>
+                                <input id="name" name="name" type="text" ng-model="Name" required
+                                       style="border-bottom: 1px solid #FFC1E3;">
+                                <label for="name">Full Name</label>
+                            </div>
+                        </div>
+
+                        <div style="margin: 10px 0 25px 0; padding: 15px; border-radius: 15px; background-color: #FFF9FB;">
+                            <p style="font-family:'Tilt Warp', sans-serif; font-size:16px; color:#FF1493; margin-top: 0; margin-bottom:15px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">
+                                Register As
+                            </p>
+                            <div class="row center-align" style="margin-bottom: 0;">
+                                <div class="col s6">
+                                    <label>
+                                        <input name="group1" type="radio" ng-model="RegisterAs" value="user"
+                                               ng-disabled="isAdmin" ng-required="!isAdmin" class="with-gap" />
+                                        <span style="color: #555; font-weight: 500;">User</span>
+                                    </label>
+                                </div>
+                                <div class="col s6">
+                                    <label>
+                                        <input name="group1" type="radio" ng-model="RegisterAs" value="artisan"
+                                               ng-disabled="isAdmin" ng-required="!isAdmin" class="with-gap" />
+                                        <span style="color: #555; font-weight: 500;">Artisan/Artist</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-show="isAdmin" class="center-align animated fadeIn"
+                             style="color: #f50057; font-weight: bold; margin: 0 0 20px 0; padding: 10px; border: 1px dashed #f50057; border-radius: 10px; background-color: #fff0f3;">
+                            <i class="material-icons" style="vertical-align: middle; margin-right: 5px;">verified_user</i>
+                            Admin Account Detected
+                        </div>
+
+                        <div class="row center-align" style="margin-bottom: 15px;">
+                            <button type="button" class="waves-effect waves-light btn-large pink lighten-3"
+                                    style="width:140px; border-radius:25px; margin-right:1rem; font-weight: bold; box-shadow: 0 4px 15px rgba(240, 98, 146, 0.3);"
+                                    ng-click="saveFunc()" ng-disabled="registerForm.$invalid">
+                                SAVE
+                            </button>
+                            <button type="button" class="waves-effect waves-light btn-large red lighten-2"
+                                    style="width: 140px; border-radius:25px; font-weight: bold; box-shadow: 0 4px 15px rgba(229, 115, 115, 0.3);"
+                                    ng-click="cancelFunc()">
+                                CANCEL
+                            </button>
+                        </div>
+
+                        <div class="center-align" style="margin-top: 20px;">
+                            <p style="color: #888; font-size: 0.95rem;">
+                                Already have an account?
+                                <a href="@Url.Action("LogInPage", "CraftSystem")"
+                                   style="color: #f50057; font-weight: 600; text-decoration: none; border-bottom: 1px solid #f50057;">
+                                    Login here
+                                </a>
+                            </p>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .input-field input:focus + label {
+        color: #f50057 !important;
+    }
+
+    .input-field input:focus {
+        border-bottom: 2px solid #f50057 !important;
+        box-shadow: none !important;
+    }
+
+    .btn-large:hover {
+        transform: translateY(-2px);
+        transition: 0.2s;
+    }
+</style>

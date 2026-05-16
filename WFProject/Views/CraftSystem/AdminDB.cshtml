@@ -1,0 +1,310 @@
+﻿@{
+    if (Session["UserRole"] == null || Session["UserRole"].ToString().ToLower() != "admin")
+    {
+        Response.Redirect("~/CraftSystem/LogInPage");
+    }
+    Layout = "~/Views/Shared/_CraftsSystemLayout.cshtml";
+}
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        background-color: #FFF0F5;
+    }
+
+    .admin-sidebar {
+        background-color: #f50057;
+        height: 100vh;
+        width: 280px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        color: white;
+        padding: 2rem 1rem;
+        z-index: 1000;
+        box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+    }
+
+    .admin-main {
+        margin-left: 280px;
+        width: calc(100% - 280px);
+        padding: 3rem;
+        box-sizing: border-box;
+    }
+
+    .admin-nav-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        color: white !important;
+        border-radius: 10px;
+        margin-bottom: 8px;
+        text-decoration: none;
+        background: rgba(255,255,255,0.1);
+        transition: 0.3s;
+    }
+
+        .admin-nav-item:hover, .active-section {
+            background-color: rgba(255, 255, 255, 0.3) !important;
+        }
+    /* table layout */
+    table.highlight {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    th {
+        color: #f50057;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 15px 5px !important;
+    }
+
+    td {
+        padding: 15px 5px !important;
+        vertical-align: middle;
+    }
+
+    /* action button horizontal*/
+    .action-group {
+        display: flex;
+        gap: 5px;
+        justify-content: center;
+    }
+
+        .action-group .btn-small {
+            border-radius: 6px;
+            font-weight: bold;
+            padding: 0 10px;
+        }
+
+    .desc-scroll {
+        max-width: 250px;
+        max-height: 70px;
+        overflow-y: auto;
+        font-size: 0.85rem;
+        color: #666;
+        line-height: 1.3;
+    }
+
+    canvas {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    /* align table */
+    table.highlight {
+        background: white;
+        border-radius: 10px;
+    }
+
+    th {
+        color: #f50057;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    td {
+        vertical-align: middle;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 5px;
+        justify-content: center;
+    }
+
+        .action-buttons button {
+            margin: 0 !important;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+    /* description with scroll */
+    .desc-text {
+        max-width: 250px;
+        max-height: 60px;
+        overflow-y: auto;
+        font-size: 0.85rem;
+        color: #666;
+    }
+</style>
+
+<div ng-controller="AdminCtrl">
+    <div class="admin-wrapper">
+
+        <div class="admin-sidebar" ng-init="activeSection='dashboard'">
+            <div class="center-align" style="margin-bottom: 3rem;">
+                <h5 style="font-family:'Zacbel X'; letter-spacing: 1px;">ADMIN PANEL</h5>
+                <div style="border-bottom: 1px solid rgba(255,255,255,0.3); margin: 1rem 0;"></div>
+            </div>
+
+            <div class="nav-links">
+                <a href="" class="admin-nav-item" ng-click="activeSection='dashboard'" ng-class="{'active-section': activeSection=='dashboard'}">
+                    <i class="material-icons">dashboard</i> Dashboard
+                </a>
+                <a href="" class="admin-nav-item" ng-click="activeSection='artisans'" ng-class="{'active-section': activeSection=='artisans'}">
+                    <i class="material-icons">store</i> Artisans
+                </a>
+                <a href="" class="admin-nav-item" ng-click="activeSection='products'" ng-class="{'active-section': activeSection=='products'}">
+                    <i class="material-icons">inventory_2</i> Products
+                </a>
+                <a href="" class="admin-nav-item" ng-click="activeSection='users'" ng-class="{'active-section': activeSection=='users'}">
+                    <i class="material-icons">people</i> Users
+                </a>
+
+                <div style="margin-top: 5rem;">
+                    <a href="/CraftSystem/Logout" class="admin-nav-item red darken-2">
+                        <i class="material-icons">logout</i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-main">
+            <h4 style="font-family:'Zacbel X'; color:#f50057; margin-bottom: 2rem; text-transform: uppercase;">
+                {{activeSection}}
+            </h4>
+
+            <div ng-show="activeSection=='dashboard'">
+                <div class="row">
+                    <div class="col s12 m6">
+                        <div class="card white z-depth-1">
+                            <div class="card-content center-align">
+                                <h3 class="pink-text text-darken-2" style="margin:0;">{{totalProducts}}</h3>
+                                <p class="font-bold">Total Products</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col s12 m6">
+                        <div class="card white z-depth-1">
+                            <div class="card-content center-align">
+                                <h3 class="green-text text-darken-3" style="margin:0;">{{approvedCount}}</h3>
+                                <p class="font-bold">Live Products</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-show="activeSection=='dashboard'">
+                    <div class="row" style="margin-top: 3rem;">
+                        <div class="col s12 m4">
+                            <canvas id="chartProducts" height="250"></canvas>
+                        </div>
+                        <div class="col s12 m4">
+                            <canvas id="chartUsersArtisans" height="250"></canvas>
+                        </div>
+                        <div class="col s12 m4">
+                            <canvas id="chartProductsPerArtisan" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="activeSection=='artisans'">
+                <div class="card">
+                    <div class="card-content">
+                        <table class="highlight centered">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Store Name</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="artisan in artisans">
+                                    <td>{{artisan.username}}</td>
+                                    <td>{{artisan.artisanName}}</td>
+                                    <td>
+                                        <span class="white-text badge" style="float:none; border-radius:4px;"
+                                              ng-class="artisan.artisanStatus=='active' ? 'green' : 'red'">
+                                            {{artisan.artisanStatus}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn-small orange waves-effect" ng-click="disableArtisan(artisan.ArtisanId)">TOGGLE</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="activeSection=='products'">
+                <div class="card">
+                    <div class="card-content">
+                        <table class="highlight responsive-table">
+                            <thead>
+                                <tr>
+                                    <th>Picture</th>
+                                    <th>Product</th>
+                                    <th>Description</th>
+                                    <th>Created By</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="p in products">
+                                    <td><img ng-src="{{p.ProductImgUrl}}" style="width:60px; height:60px; object-fit:cover; border-radius:8px;"></td>
+                                    <td style="font-weight:bold;">{{p.ProductName}}</td>
+                                    <td><div class="desc-text">{{p.ProductDesc}}</div></td>
+                                    <td><span class="chip pink lighten-5 pink-text">{{p.username}}</span></td>
+                                    <td>
+                                        <span class="badge white-text" style="float:none;"
+                                              ng-class="p.ProductStatus=='approved' ? 'green' : 'orange'">
+                                            {{p.ProductStatus}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn-small green" ng-if="p.ProductStatus!='approved'" ng-click="approveProduct(p.ProductId)">Approve</button>
+                                            <button class="btn-small red" ng-click="removeProduct(p.ProductId)">Delete</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="activeSection=='users'">
+                <div class="card">
+                    <div class="card-content">
+                        <table class="highlight centered">
+                            <thead>
+                                <tr class="pink-text">
+                                    <th>Full Name</th>
+                                    <th>Username</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="u in users">
+                                    <td>{{u.name}}</td>
+                                    <td>{{u.username}}</td>
+                                    <td>{{u.user_role}}</td>
+                                    <td>{{u.status}}</td>
+                                    <td>
+                                        <button class="btn-small orange" ng-click="toggleUser(u.UserId)">Toggle</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

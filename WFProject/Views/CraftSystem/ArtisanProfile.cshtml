@@ -1,0 +1,154 @@
+@{
+    if (Session["UserRole"] == null || Session["UserRole"].ToString().ToLower() != "artisan")
+    {
+        Response.Redirect("~/CraftSystem/LogInPage");
+    }
+    Layout = "~/Views/Shared/_CraftsSystemLayout.cshtml";
+}
+
+<style>
+    .sidebar {
+        background: #f50057;
+        height: 100vh;
+        padding: 1.5rem 0;
+        position: relative;
+    }
+
+        .sidebar .artisan-brand {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 0 15px;
+        }
+
+        .sidebar h5 {
+            font-family: 'Zacbel X';
+            color: white;
+            margin: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .sidebar p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.8rem;
+            margin: 5px 0 0 0;
+        }
+
+        .sidebar ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .sidebar a {
+            color: white !important;
+            font-weight: 500;
+            display: block;
+            padding: 12px 20px;
+            margin: 5px 15px;
+            border-radius: 10px;
+            transition: 0.2s;
+            text-decoration: none;
+        }
+
+            .sidebar a:hover, .sidebar a.active {
+                background: rgba(255,255,255,0.2);
+            }
+
+    .main-bg {
+        background: #FFF0F5;
+        min-height: 100vh;
+        padding: 2rem;
+    }
+
+    .dashboard-card {
+        border-radius: 20px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+        background: white;
+    }
+
+    .save-btn {
+        background: #f50057 !important;
+        border-radius: 20px;
+        padding: 0 40px;
+        font-weight: bold;
+    }
+</style>
+
+<div class="row" style="margin:0;" ng-controller="CraftSystem" ng-init="loadProfile()">
+
+    <div class="col s12 m3 l2 sidebar">
+        <div class="artisan-brand">
+            <h5>{{artisanProfile.artisanName || 'Artisan'}}</h5>
+            <p>Vendor Account</p>
+        </div>
+
+        <ul>
+            <li><a href="/CraftSystem/ArtisanDB">My Dashboard</a></li>
+            <li><a href="/CraftSystem/AddProducts">Add New Craft</a></li>
+        </ul>
+
+        <div style="position: absolute; bottom: 20px; width: 100%;">
+            <div style="padding: 0 15px;">
+                <hr style="border: 0.5px solid rgba(255,255,255,0.2); margin-bottom: 1rem;">
+            </div>
+            <a href="/CraftSystem/ArtisanProfile" class="active">
+                <i class="material-icons left">person</i> My Profile
+            </a>
+            <a href="/CraftSystem/Logout">
+                <i class="material-icons left">exit_to_app</i> Logout
+            </a>
+        </div>
+    </div>
+
+    <div class="col s12 m9 l10 main-bg">
+        <h4 style="font-family:'Zacbel X'; color:#f50057; font-weight: bold;">Update Your Profile 👤</h4>
+
+        <div class="card dashboard-card" style="padding:2rem; margin-top:2rem;">
+            <div class="row">
+                <form class="col s12">
+                    <input type="hidden" ng-model="artisanProfile.ArtisanId" />
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <i class="material-icons prefix">store</i>
+                            <input id="artisan_name" type="text" ng-model="artisanProfile.artisanName">
+                            <label for="artisan_name">Artisan / Shop Name</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <i class="material-icons prefix">phone</i>
+                            <input id="contact" type="text" ng-model="artisanProfile.contactNum" maxlength="20">
+                            <label for="contact">Contact Number</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <i class="material-icons prefix">description</i>
+                            <textarea id="bio" class="materialize-textarea" ng-model="artisanProfile.artisanBio"></textarea>
+                            <label for="bio">About your crafts</label>
+                        </div>
+                    </div>
+
+                    <div class="center-align">
+                        <button type="button" class="btn waves-effect waves-light save-btn" ng-click="updateArtisanProfile()">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        M.updateTextFields();
+        var bio = document.getElementById('bio');
+        if (bio) { M.textareaAutoResize(bio); }
+    });
+</script>

@@ -1,0 +1,264 @@
+@{
+    if (Session["UserRole"] == null || Session["UserRole"].ToString().ToLower() != "user")
+    {
+        Response.Redirect("~/CraftSystem/LogInPage");
+    }
+
+    Layout = "~/Views/Shared/_CraftsSystemLayout.cshtml";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Zacbel+X&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        background: #fffcfd;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .custom-nav {
+        background-color: #FFF0F5 !important;
+        padding: 0 3rem;
+        border-bottom-left-radius: 25px;
+        border-bottom-right-radius: 25px;
+        height: 80px;
+        line-height: 80px;
+        box-shadow: none;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .nav-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 80px;
+    }
+
+    .nav-links-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 35px;
+    }
+
+    .nav-link-item {
+        color: #f50057 !important;
+        font-weight: 500;
+        text-decoration: none;
+        font-size: 16px;
+        position: relative;
+        transition: 0.3s;
+    }
+
+        .nav-link-item:hover {
+            opacity: 0.7;
+        }
+
+        .nav-link-item::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #f50057;
+            transition: 0.3s;
+        }
+
+        .nav-link-item:hover::after, .active-link::after {
+            width: 100%;
+        }
+
+    .logout-btn {
+        border-radius: 20px;
+        font-weight: 500;
+        height: 40px;
+        line-height: 40px;
+        background-color: #f06292 !important;
+        transition: 0.3s ease;
+    }
+
+        .logout-btn:hover {
+            background-color: #f50057 !important;
+            transform: scale(1.05);
+        }
+
+    .gallery-header {
+        padding: 6vh 10% 4vh 10%;
+        text-align: center;
+    }
+
+    .artisan-block {
+        margin-bottom: 5rem;
+    }
+
+    .artisan-name {
+        font-family: 'Zacbel X', sans-serif;
+        color: #f50057;
+        font-size: 2.2rem;
+        margin-bottom: 2rem;
+        border-left: 5px solid #f50057;
+        padding-left: 15px;
+    }
+
+    .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 30px;
+    }
+
+    .exhibit-card {
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+        .exhibit-card:hover {
+            transform: translateY(-8px);
+        }
+
+    .square-img-container {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        border-radius: 20px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    }
+
+        .square-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .item-name-label {
+        margin-top: 15px;
+        font-family: 'Zacbel X', sans-serif;
+        font-size: 1.3rem;
+        color: #2d2d2d;
+        display: block;
+        text-align: center;
+    }
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 240, 245, 0.95);
+        z-index: 2000;
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        max-width: 800px;
+        background: #fff;
+        border-radius: 30px;
+        display: flex;
+        overflow: hidden;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+    }
+
+    .modal-img {
+        width: 50%;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+    }
+
+    .modal-text {
+        width: 50%;
+        padding: 40px;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 30px;
+        right: 40px;
+        font-size: 30px;
+        color: #f50057;
+        cursor: pointer;
+    }
+</style>
+
+<div ng-controller="CraftSystem">
+
+    <nav class="custom-nav">
+        <div class="nav-container">
+            <a href="@Url.Action("Homepage","CraftSystem")">
+                <img src="@Url.Content("~/Content/images/logo1.png")" alt="Logo" style="height:55px;">
+            </a>
+            <div class="nav-links-wrapper">
+                <a href="@Url.Action("Homepage","CraftSystem")" class="nav-link-item">Home</a>
+                <a href="@Url.Action("AboutPage","CraftSystem")" class="nav-link-item">About</a>
+                <a href="@Url.Action("ArtisanPage","CraftSystem")" class="nav-link-item active-link">Artisan Page</a>
+                <a href="@Url.Action("Logout","CraftSystem")" class="waves-effect waves-light btn logout-btn">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <header class="gallery-header">
+            <h3 style="color: #f50057; font-family: 'Zacbel X', sans-serif;">Artisan Showcase</h3>
+        </header>
+
+        <div class="artisan-block" ng-repeat="group in showcaseData">
+            <h2 class="artisan-name">{{group.artisanName}}</h2>
+
+            <div class="gallery-grid">
+                <div class="exhibit-card"
+                     ng-repeat="craft in group.Crafts"
+                     ng-click="openExhibit(craft.ProductName, craft.ProductImgUrl, craft.ProductDesc)">
+
+                    <div class="square-img-container">
+                        <img ng-src="{{craft.ProductImgUrl}}" alt="{{craft.ProductName}}" />
+                    </div>
+
+                    <span class="item-name-label">{{craft.ProductName}}</span>
+                </div>
+            </div>
+        </div>
+
+        <div ng-if="showcaseData.length == 0" class="center-align" style="padding: 100px 0;">
+            <p class="grey-text">The gallery is being curated. Please check back later.</p>
+        </div>
+
+    </div>
+
+    <div id="exhibitModal" class="modal-overlay" ng-click="closeExhibit()">
+        <span class="close-btn">&times;</span>
+
+        <div class="modal-content" ng-click="$event.stopPropagation()">
+            <img id="modalImg" class="modal-img" src="" />
+            <div class="modal-text">
+                <h4 id="modalTitle" style="color:#f50057; margin-top:0; font-family: 'Zacbel X', sans-serif;"></h4>
+                <p id="modalDesc" style="color:#555; line-height:1.6;"></p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer style="background: linear-gradient(135deg, #f50057 0%, #d8004d 100%); color: white; padding: 5rem 0 2rem 0; border-top-left-radius: 60px; border-top-right-radius: 60px; margin-top: 50px;">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m4">
+                <h5 style="font-family:'Zacbel X', sans-serif; margin-bottom: 20px;">MoonlightCraft</h5>
+                <p style="opacity: 0.9; font-size: 14px; font-weight: 300; line-height: 1.8;">
+                    Supporting Filipino artisans by providing a platform for their handcrafted masterpieces.
+                </p>
+            </div>
+            <div class="col s12 m4">
+                <h6 style="font-weight: 600; text-transform: uppercase; margin-bottom: 20px;">Contact</h6>
+                <p style="font-size: 14px; opacity: 0.9;">
+                    <i class="material-icons" style="font-size: 16px; vertical-align: middle;">email</i> moonlightcraft@gmail.com
+                </p>
+            </div>
+        </div>
+        <div class="center-align" style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.2); font-size: 12px; opacity: 0.7;">
+            &copy; 2026 MoonlightCraft. All Rights Reserved.
+        </div>
+    </div>
+</footer>

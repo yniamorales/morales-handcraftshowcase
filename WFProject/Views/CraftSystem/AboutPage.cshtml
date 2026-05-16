@@ -1,0 +1,254 @@
+@{
+    Layout = "~/Views/Shared/_CraftsSystemLayout.cshtml";
+    Response.ContentEncoding = System.Text.Encoding.UTF8;
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Zacbel+X&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        background: #fffcfd;
+        font-family: 'Poppins', sans-serif;
+        color: #333;
+    }
+
+    .custom-nav {
+        background-color: #FFF0F5 !important;
+        padding: 0 3rem;
+        border-bottom-left-radius: 25px;
+        border-bottom-right-radius: 25px;
+        height: 80px;
+        line-height: 80px;
+        box-shadow: none;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .nav-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 80px;
+    }
+
+    .nav-links-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 35px;
+    }
+
+    .nav-link-item {
+        color: #f50057 !important;
+        font-weight: 500;
+        text-decoration: none;
+        font-family: 'Poppins', sans-serif;
+        font-size: 16px;
+        position: relative;
+        transition: all 0.3s ease;
+        padding-bottom: 5px;
+    }
+
+        .nav-link-item:hover {
+            opacity: 0.7;
+        }
+
+        .nav-link-item::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #f50057;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link-item:hover::after {
+            width: 100%;
+        }
+
+    .active-link::after {
+        width: 100% !important;
+    }
+
+    .logout-btn {
+        border-radius: 20px;
+        font-weight: 500;
+        text-transform: none;
+        height: 40px;
+        line-height: 40px;
+        background-color: #f06292 !important;
+        transition: background-color 0.3s ease, transform 0.2s ease !important;
+        color: white !important;
+        padding: 0 20px;
+        display: inline-block;
+    }
+
+        .logout-btn:hover {
+            background-color: #f50057 !important;
+            transform: scale(1.05);
+        }
+
+    .about-hero {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8vh 10%;
+        gap: 60px;
+    }
+
+    .hero-image-wrapper {
+        position: relative;
+        z-index: 1;
+    }
+
+        .hero-image-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 100%;
+            height: 100%;
+            border: 3px solid #f50057;
+            border-radius: 30px;
+            z-index: -1;
+        }
+
+    .main-about-img {
+        width: 400px;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 30px;
+        box-shadow: 0 20px 40px rgba(245, 0, 87, 0.15);
+        display: block;
+    }
+
+    .info-card {
+        width: 280px;
+        background: white;
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        border: 1px solid rgba(245, 0, 87, 0.05);
+        transition: transform 0.3s ease;
+    }
+
+        .info-card:hover {
+            transform: translateY(-10px);
+            border-color: #f50057;
+        }
+
+    .square-thumb {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 15px;
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        font-family: 'Zacbel X', sans-serif;
+        text-align: center;
+        color: #2d2d2d;
+        font-size: 3rem;
+        margin-bottom: 3rem;
+    }
+
+    .pink-text-accent {
+        color: #f50057;
+    }
+</style>
+
+<nav class="custom-nav">
+    <div class="nav-container">
+        <a href="@Url.Action("Homepage","CraftSystem")">
+            <img src="@Url.Content("~/Content/images/logo1.png")" alt="Logo" style="height:55px;">
+        </a>
+
+        <div class="nav-links-wrapper">
+            <a href="@Url.Action("Homepage","CraftSystem")" class="nav-link-item">Home</a>
+            <a href="@Url.Action("AboutPage","CraftSystem")" class="nav-link-item active-link">About</a>
+            <a href="@Url.Action("ArtisanPage","CraftSystem")" class="nav-link-item">Artisan Page</a>
+
+            <a href="@Url.Action("LogInPage","CraftSystem")"
+               class="waves-effect waves-light btn logout-btn">
+                Logout
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="about-hero">
+    <div class="hero-image-wrapper">
+        <img src="@Url.Content("~/Content/Images/artistalley.jpg")" class="main-about-img" />
+    </div>
+
+    <div style="max-width:550px;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+            <div style="width: 40px; height: 2px; background: #f50057;"></div>
+            <span style="color: #f50057; font-weight: 600; letter-spacing: 2px; font-size: 13px; text-transform: uppercase;">Our Story</span>
+        </div>
+        <h2 style="font-family:'Zacbel X', sans-serif; color:#2d2d2d; font-size:42px; line-height: 1.1; margin: 0 0 20px 0;">
+            Beyond the <span class="pink-text-accent">Craft</span>, <br />It’s the Culture.
+        </h2>
+        <p style="color:#666; font-size:17px; line-height:1.8; font-weight: 300;">
+            MoonlightCraft was born from a desire to celebrate the hands that create. We believe that every handmade item carries a piece of the artisan's soul of the Philippines.
+        </p>
+    </div>
+</div>
+
+<div class="container" style="padding-bottom: 8rem;">
+    <h3 class="section-title">What is <span class="pink-text-accent">MoonlightCraft?</span></h3>
+
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:40px;">
+
+        <div class="info-card">
+            <img src="@Url.Content("~/Content/Images/crocheting.jpg")" class="square-thumb" />
+            <h6 style="font-family:'Zacbel X', sans-serif; color:#f50057; font-size: 1.2rem;">Handmade Treasures</h6>
+            <p style="font-size:14px; color:#777; line-height: 1.6;">A curated marketplace for unique, artisanal creations that you won't find anywhere else.</p>
+        </div>
+
+        <div class="info-card">
+            <img src="@Url.Content("~/Content/Images/rockpaint.jpg")" class="square-thumb" />
+            <h6 style="font-family:'Zacbel X', sans-serif; color:#f50057; font-size: 1.2rem;">Support Local</h6>
+            <p style="font-size:14px; color:#777; line-height: 1.6;">A dedicated platform that empowers Filipino makers by connecting them with craft enthusiasts.</p>
+        </div>
+
+        <div class="info-card">
+            <img src="@Url.Content("~/Content/Images/craftedpots.jpg")" class="square-thumb" />
+            <h6 style="font-family:'Zacbel X', sans-serif; color:#f50057; font-size: 1.2rem;">Share Your Craft</h6>
+            <p style="font-size:14px; color:#777; line-height: 1.6;">An open digital community where artists can showcase their unique, one-of-a-kind products.</p>
+        </div>
+
+    </div>
+</div>
+
+<footer style="background: linear-gradient(135deg, #f50057 0%, #d8004d 100%); color: white; padding: 5rem 0 2rem 0; border-top-left-radius: 60px; border-top-right-radius: 60px;">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m4">
+                <h5 style="font-family:'Zacbel X', sans-serif; margin-bottom: 20px;">MoonlightCraft</h5>
+                <p style="opacity: 0.9; font-size: 14px; font-weight: 300; line-height: 1.8;">
+                    Supporting Filipino artisans by providing a platform for their unique,
+                    handcrafted masterpieces. Proudly local.
+                </p>
+            </div>
+            <div class="col s12 m4">
+                <h6 style="font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;">Contact</h6>
+                <p style="font-size: 14px; opacity: 0.9; line-height: 2;">
+                    <i class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 8px;">email</i> moonlightcraft@gmail.com<br>
+                    <i class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 8px;">location_on</i> Cavite, Philippines
+                </p>
+            </div>
+            <div class="col s12 m4">
+                <h6 style="font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;">Join Us</h6>
+                <p style="font-size: 14px; opacity: 0.9;">Follow our journey and discover the latest creations from our talented artists.</p>
+            </div>
+        </div>
+        <div class="center-align" style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.2); font-size: 12px; opacity: 0.7;">
+            &copy; 2026 MoonlightCraft. All Rights Reserved.
+        </div>
+    </div>
+</footer>

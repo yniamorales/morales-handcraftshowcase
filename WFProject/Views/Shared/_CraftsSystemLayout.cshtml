@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" charset="utf-8" />
+    <title>@ViewBag.Title</title>
+
+
+    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link href="https://fonts.cdnfonts.com/css/zacbel-x" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/tilt-warp" rel="stylesheet">
+
+
+    <script src="~/Scripts/angular.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Roboto', 'Zacbel X', 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+        }
+
+        .material-icons {
+            font-family: 'Material Icons' !important;
+        }
+
+        html, body {
+            height: 100%;
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #FF9A9A, #FFE5E5);
+            overflow-x: hidden;
+        }
+
+        [type="radio"]:checked + span:after {
+            background-color: pink;
+            border: 2px solid pink;
+        }
+
+        [type="radio"].with-gap:checked + span:before {
+            border: 2px solid pink;
+        }
+
+        [type="radio"].with-gap:checked + span:after {
+            background-color: pink;
+        }
+
+        .regis-card {
+            animation: floatDown 1.2s ease-out;
+        }
+
+        .login-card {
+            animation: floatDown 1.2s ease-out;
+        }
+
+        @@keyframes floatDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-40px) scale(0.97);
+            }
+
+            60% {
+                opacity: 1;
+                transform: translateY(5px) scale(1.01);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0px) scale(1);
+            }
+        }
+
+        .card-animate {
+            animation: cardFadeUp 0.8s ease;
+        }
+
+        @@keyframes cardFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-animate:hover {
+            transform: translateY(-5px);
+            transition: 0.3s ease;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+
+        button[disabled] {
+            opacity: 1;
+            cursor: not-allowed;
+        }
+
+        nav a:hover {
+            color: #c2185b;
+        }
+    </style>
+
+</head>
+<body ng-app="WFProject" ng-controller="CraftSystem">
+    <div>
+        @RenderBody()
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/Content/js/Controller.js"></script>
+
+    <script src="~/Scripts/MainScripts/Module.js"></script>
+    <script src="~/Scripts/MainScripts/Service.js"></script>
+    <script src="~/Scripts/MainScripts/Controller.js"></script>
+
+</body>
+</html>
